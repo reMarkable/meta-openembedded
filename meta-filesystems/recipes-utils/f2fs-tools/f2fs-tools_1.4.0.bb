@@ -12,6 +12,12 @@ SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git 
     file://0001-Remove-AC_CHECK_FILE-for-cross-compilation.patch"
 S = "${WORKDIR}/git"
 
-inherit pkgconfig autotools
+inherit pkgconfig autotools-brokensep
+
+do_install () {
+    install -d ${D}${base_sbindir}
+    oe_runmake DESTDIR="${D}" install
+
+}
 
 BBCLASSEXTEND = "native"
