@@ -72,7 +72,7 @@ do_install_append() {
         install -m 0644 ${S}/src/client/linux/minidump_writer/minidump_writer.h ${D}${includedir}/breakpad/client/linux/minidump_writer/minidump_writer.h
 
         install -d ${D}${includedir}/breakpad/common
-        install -m 0644 ${S}/src/common/memory.h ${D}${includedir}/breakpad/common/memory.h
+        install -m 0644 ${S}/src/common/memory_allocator.h ${D}${includedir}/breakpad/common/memory_allocator.h
         install -m 0644 ${S}/src/common/scoped_ptr.h ${D}${includedir}/breakpad/common/scoped_ptr.h
         install -m 0644 ${S}/src/common/using_std_string.h ${D}${includedir}/breakpad/common/using_std_string.h
 
