@@ -5,7 +5,8 @@ LICENSE = "GPLv2 & LGPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=12713b4d9386533feeb07d6e4831765a \
                     file://COPYING.LIB;md5=fbc093901857fcd118f065f900982c24"
 
-DEPENDS += "util-linux"
+#DEPENDS += "util-linux"
+DEPENDS += "libaio"
 
 SRC_URI = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${PV}.tgz \
            file://lvm.conf \
@@ -21,7 +22,7 @@ S = "${WORKDIR}/LVM2.${PV}"
 
 inherit autotools-brokensep pkgconfig systemd license
 
-LVM2_PACKAGECONFIG = "dmeventd lvmetad"
+LVM2_PACKAGECONFIG = "dmeventd"
 LVM2_PACKAGECONFIG_append_class-target = " \
     ${@bb.utils.filter('DISTRO_FEATURES', 'selinux', d)} \
     ${@incompatible_license_contains('GPLv3', '', 'thin-provisioning-tools', d)} \
@@ -35,12 +36,10 @@ LVM2_PACKAGECONFIG_append_class-target = " \
 PACKAGECONFIG ??= "odirect ${LVM2_PACKAGECONFIG}"
 
 PACKAGECONFIG[dmeventd] = "--enable-dmeventd,--disable-dmeventd"
-PACKAGECONFIG[lvmetad] = "--enable-lvmetad,--disable-lvmetad"
 PACKAGECONFIG[odirect] = "--enable-o_direct,--disable-o_direct"
 PACKAGECONFIG[readline] = "--enable-readline,--disable-readline,readline"
 PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux"
 PACKAGECONFIG[thin-provisioning-tools] = "--with-thin=internal,--with-thin=none,,thin-provisioning-tools"
-PACKAGECONFIG[udev] = "--enable-udev_sync --enable-udev_rules --with-udevdir=${nonarch_base_libdir}/udev/rules.d,--disable-udev_sync --disable-udev_rules,udev"
 
 # Unset user/group to unbreak install.
 EXTRA_OECONF = "--with-user= \

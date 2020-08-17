@@ -11,6 +11,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=32107dd283b1dfeb66c9b3e6be312326"
 
 DEPENDS = "util-linux libdevmapper popt libgcrypt"
 
+RDEPENDS_${PN} = " \
+    libdevmapper \
+"
+
 SRC_URI = "${KERNELORG_MIRROR}/linux/utils/${BPN}/v1.7/${BP}.tar.xz"
 SRC_URI[md5sum] = "058ed35c5b776032c2a036838f9e22a7"
 SRC_URI[sha256sum] = "7ccf893ef79a38fb92d61f03c17b964982119f5319cdaa85a1335b8558cca016"

@@ -11,6 +11,8 @@ do_install() {
     oe_runmake 'DESTDIR=${D}' -C libdm install
 }
 
-RRECOMMENDS_${PN}_append_class-target = " lvm2-udevrules"
+PACKAGES = ""
+
+#RRECOMMENDS_${PN}_append_class-target = " lvm2-udevrules"
 
 BBCLASSEXTEND = "native nativesdk"

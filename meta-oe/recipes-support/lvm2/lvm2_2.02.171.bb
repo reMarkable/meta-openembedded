@@ -3,8 +3,6 @@ require lvm2.inc
 SRC_URI[md5sum] = "153b7bb643eb26073274968e9026fa8f"
 SRC_URI[sha256sum] = "b815a711a2fabaa5c3dc1a4a284df0268bf0f325f0fc0f5c9530c9bbb54b9964"
 
-SRC_URI += "file://0001-explicitly-do-not-install-libdm.patch"
-
 DEPENDS += "autoconf-archive-native"
 
 CACHED_CONFIGUREVARS += "MODPROBE_CMD=${base_sbindir}/modprobe"
@@ -34,6 +32,13 @@ SYSTEMD_AUTO_ENABLE = "disable"
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
+PACKAGES =+ "libdevmapper"
+FILES_libdevmapper = " \
+    ${libdir}/libdevmapper.so.* \
+    ${sbindir}/dmsetup \
+    ${sbindir}/dmstats \
+"
+
 FILES_${PN} += "${libdir}/device-mapper/*.so"
 FILES_${PN}-scripts = " \
     ${sbindir}/blkdeactivate \
@@ -50,5 +55,14 @@ RDEPENDS_${PN}-scripts = "${PN} (= ${EXTENDPKGV}) bash"
 RRECOMMENDS_${PN}_class-target = "${PN}-scripts (= ${EXTENDPKGV})"
 
 CONFFILES_${PN} += "${sysconfdir}/lvm/lvm.conf"
+
+SYSROOT_PREPROCESS_FUNCS_append = " remove_libdevmapper_sysroot_preprocess"
+remove_libdevmapper_sysroot_preprocess() {
+    rm -f ${SYSROOT_DESTDIR}${libdir}/libdevmapper.so* \
+       ${SYSROOT_DESTDIR}${sbindir}/dmsetup \
+       ${SYSROOT_DESTDIR}${sbindir}/dmstats \
+       ${SYSROOT_DESTDIR}${includedir}/libdevmapper.h \
+       ${SYSROOT_DESTDIR}${libdir}/pkgconfig/devmapper.pc
+}
 
 BBCLASSEXTEND = "native nativesdk"
