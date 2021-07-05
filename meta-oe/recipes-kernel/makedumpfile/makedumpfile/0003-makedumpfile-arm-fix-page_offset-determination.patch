@@ -1,0 +1,34 @@
+From 594998944be4cae6cf39819652c1200556bcf62c Mon Sep 17 00:00:00 2001
+From: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Date: Mon, 5 Jul 2021 14:28:16 +0200
+Subject: [PATCH] makedumpfile/arm: fix page_offset determination
+
+When the CONFIG_STRICT_KERNEL_RWX is enabled for the armv7 kernel the
+_stext is aligned to 1<<SECTION_SHIFT, which with hitherto code causes
+wrong page_offset determination.
+
+Suit mask used for page_offset in a way that it will allow to correctly
+determine page_offset regardless of CONFIG_STRICT_KERNEL_RWX and
+CONFIG_ARM_LPAE settings.
+
+Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+---
+ arch/arm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm.c b/arch/arm.c
+index af7442a..cddd585 100644
+--- a/arch/arm.c
++++ b/arch/arm.c
+@@ -80,7 +80,7 @@ get_phys_base_arm(void)
+ int
+ get_machdep_info_arm(void)
+ {
+-	info->page_offset = SYMBOL(_stext) & 0xffff0000UL;
++	info->page_offset = SYMBOL(_stext) & 0xffc00000UL;
+ 	info->max_physmem_bits = _MAX_PHYSMEM_BITS;
+ 	info->kernel_start = SYMBOL(_stext);
+ 	info->section_size_bits = _SECTION_SIZE_BITS;
+-- 
+2.29.0
+
